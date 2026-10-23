@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+publish/
+
+# Runtime logs / debug artifacts
+*.log
+crash.log
+cmdline_debug.txt
+wmi_error.txt
+netstat_error.txt
+
+# Local config & secrets (never commit)
+services_config.json
+lite_settings.json
+
+# IDE / OS
+.vs/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
