@@ -1120,6 +1120,7 @@ namespace RaudelControlPanelLite
             else if (svcId == "telegram_agent_tunnel" || svcId == "telegram_agent" || svcId == "telegram_antigravity_tunnel") cmdSub = "telegram_antigravity_agent_tunnel.py";
             else if (svcId == "hermes_journal" || svcId == "hermes" || svcId == "hermes_agent") cmdSub = "hermes";
             else if (svcId == "lmstudio_telegram_bot" || svcId == "lmstudio_bot") cmdSub = "lmstudio_telegram_bot.py";
+            else if (svcId == "nexus_telegram_bot") cmdSub = "NexusAPI-TelegramBot";
             else if (svcId == "localsend") procName = "localsend_app.exe";
             else if (svcId == "antigravity_admin" || svcId == "antigravity_desktop_admin") procName = "Antigravity.exe";
             else if (svcId == "waha_agy_bridge" || svcId == "waha_bridge" || svcId == "whatsapp_antigravity_bridge") cmdSub = "agy_bridge.py";
@@ -1211,6 +1212,7 @@ namespace RaudelControlPanelLite
             else if (svc.Id == "telegram_agent_tunnel" || svc.Id == "telegram_agent" || svc.Id == "telegram_antigravity_tunnel") cmdSubs = new[] { "telegram_agent_bot.py", "telegram_antigravity_agent_tunnel.py" };
             else if (svc.Id == "hermes_journal" || svc.Id == "hermes" || svc.Id == "hermes_agent") cmdSubs = new[] { "hermes", "start-gateway.bat" };
             else if (svc.Id == "lmstudio_telegram_bot" || svc.Id == "lmstudio_bot") cmdSubs = new[] { "lmstudio_telegram_bot.py" };
+            else if (svc.Id == "nexus_telegram_bot") cmdSubs = new[] { "NexusAPI-TelegramBot" };
             else if (svc.Id == "lm_studio") procNames = new[] { "LM Studio.exe", "lms.exe" };
             else if (svc.Id == "localsend") procNames = new[] { "localsend_app.exe" };
             else if (svc.Id == "antigravity_admin" || svc.Id == "antigravity_desktop_admin") procNames = new[] { "Antigravity.exe" };
