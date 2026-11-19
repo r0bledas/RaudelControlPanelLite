@@ -73,19 +73,52 @@ namespace RaudelControlPanelLite
         }
 
         /// <summary>
-        /// Applies a Docker restart policy to every container behind the service.
+        /// Applies a Docker restart policy to every container behind the service
+        /// and updates the compose file if one exists.
         /// </summary>
         public static bool SetStartupEnabled(ServiceItem svc, bool enabled)
         {
             if (!IsDockerService(svc)) return false;
 
-            var containers = ResolveContainers(svc);
-            if (containers.Count == 0) return false;
-
             string policy = enabled ? "unless-stopped" : "no";
-            string args = "update --restart=" + policy + " " + string.Join(" ", containers.Select(Quote));
-            var result = RunDocker(args);
-            return result.Ok;
+            bool composeUpdated = false;
+            string? composeFile = FindComposeFile(svc);
+            if (composeFile != null)
+            {
+                composeUpdated = UpdateComposeRestartPolicy(composeFile, policy);
+            }
+
+            var containers = ResolveContainers(svc);
+            var existingPolicies = GetRestartPolicies(containers);
+            var existingContainers = existingPolicies.Keys.ToList();
+
+            if (existingContainers.Count > 0)
+            {
+                string args = "update --restart=" + policy + " " + string.Join(" ", existingContainers.Select(Quote));
+                var result = RunDocker(args);
+                return result.Ok || composeUpdated;
+            }
+
+            return true;
+        }
+
+        private static bool UpdateComposeRestartPolicy(string composeFile, string policy)
+        {
+            try
+            {
+                if (!File.Exists(composeFile)) return false;
+                string content = File.ReadAllText(composeFile);
+                string yamlPolicy = policy == "no" ? "\"no\"" : policy;
+                var regex = new Regex(@"(^\s*restart:\s*)([^\r\n#]+)", RegexOptions.Multiline);
+                if (regex.IsMatch(content))
+                {
+                    string updated = regex.Replace(content, $"$1{yamlPolicy}");
+                    File.WriteAllText(composeFile, updated);
+                    return true;
+                }
+            }
+            catch { }
+            return false;
         }
 
         /// <summary>

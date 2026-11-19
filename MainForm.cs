@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -350,10 +350,19 @@ namespace RaudelControlPanelLite
                 {
                     RunSchtasksChange(@"\Antigravity_Desktop_Admin", flag);
                 }
+                else if (svc.Id == "cloudflare_rdp_toggle")
+                {
+                    RunSchtasksChange(@"\CloudFlareToggleRDP_Admin", flag);
+                }
                 else if (svc.Id == "lmstudio_telegram_bot" || svc.Id == "lmstudio_bot")
                 {
                     RunSchtasksChange(@"\RunLLMBotOnBoot", flag);
                     RunSchtasksChange(@"\RunBotLLM", flag);
+                }
+                else if (svc.Id == "waha_agy_bridge" || svc.Id == "waha_bridge")
+                {
+                    // Panel manages agy_bridge.py directly on port 5055; keep legacy task disabled to prevent port 5055/5056 collisions
+                    RunSchtasksChange(@"\WAHA_Bridge", "/DISABLE");
                 }
             }
             catch (Exception ex) { AppendLog($"Task sync error: {ex.Message}"); }
@@ -1123,6 +1132,7 @@ namespace RaudelControlPanelLite
             else if (svcId == "nexus_telegram_bot") cmdSub = "NexusAPI-TelegramBot";
             else if (svcId == "localsend") procName = "localsend_app.exe";
             else if (svcId == "antigravity_admin" || svcId == "antigravity_desktop_admin") procName = "Antigravity.exe";
+            else if (svcId == "cloudflare_rdp_toggle") procName = "CloudFlareToggleRDP";
             else if (svcId == "waha_agy_bridge" || svcId == "waha_bridge" || svcId == "whatsapp_antigravity_bridge") cmdSub = "agy_bridge.py";
             else return (false, 0);
 
@@ -1216,6 +1226,7 @@ namespace RaudelControlPanelLite
             else if (svc.Id == "lm_studio") procNames = new[] { "LM Studio.exe", "lms.exe" };
             else if (svc.Id == "localsend") procNames = new[] { "localsend_app.exe" };
             else if (svc.Id == "antigravity_admin" || svc.Id == "antigravity_desktop_admin") procNames = new[] { "Antigravity.exe" };
+            else if (svc.Id == "cloudflare_rdp_toggle") procNames = new[] { "CloudFlareToggleRDP.exe", "CloudFlareToggleRDP" };
             else if (svc.Id == "waha_agy_bridge" || svc.Id == "waha_bridge" || svc.Id == "whatsapp_antigravity_bridge") cmdSubs = new[] { "agy_bridge.py" };
             else if (svc.Id == "waha")
             {
